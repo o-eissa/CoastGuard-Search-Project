@@ -333,140 +333,143 @@ public class CoastGuardPublic {
 	//
 	//
 	//
+	// @Test(timeout = 10000)
+	// public void teste0() throws Exception {
+	// String solution = CoastGuard.solve(grid0, "GR1", false);
+	// solution = solution.replace(" ", "");
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid0, solution));
+	// }
+
+	// @Test(timeout = 10000)
+	// public void teste1() throws Exception {
+	// String solution = CoastGuard.solve(grid1, "GR1", false);
+	// solution = solution.replace(" ", "");
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid1, solution));
+	// }
+
+	// @Test(timeout = 10000)
+	// public void teste2() throws Exception {
+	// String solution = CoastGuard.solve(grid2, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid2, solution));
+	// }
+
+	// @Test(timeout = 30000)
+	// public void teste3() throws Exception {
+	// String solution = CoastGuard.solve(grid3, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid3, solution));
+	// }
+
+	// @Test(timeout = 10000)
+	// public void teste4() throws Exception {
+	// String solution = CoastGuard.solve(grid4, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid4, solution));
+	// }
+
+	// @Test(timeout = 10000)
+	// public void teste5() throws Exception {
+	// String solution = CoastGuard.solve(grid5, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid5, solution));
+	// }
+
+	// @Test(timeout = 10000)
+	// public void teste6() throws Exception {
+	// String solution = CoastGuard.solve(grid6, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid6, solution));
+	// }
+
+	// @Test(timeout = 10000)
+	// public void teste7() throws Exception {
+	// String solution = CoastGuard.solve(grid7, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid7, solution));
+	// }
+
+	// @Test(timeout = 10000)
+	// public void teste8() throws Exception {
+	// String solution = CoastGuard.solve(grid8, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid8, solution));
+	// }
+
+	// @Test(timeout = 60000)
+	// public void teste9() throws Exception {
+	// String solution = CoastGuard.solve(grid9, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid9, solution));
+	// }
+
+	// @Test(timeout = 60000)
+	// public void teste10() throws Exception {
+	// String solution = CoastGuard.solve(grid10, "GR1", false);
+	// assertTrue("The output actions do not lead to a goal state.",
+	// applyPlan(grid10, solution));
+	// }
+	//
+	//
 	@Test(timeout = 10000)
-	public void teste0() throws Exception {
-		String solution = CoastGuard.solve(grid0, "GR1", false);
+	public void testf0() throws Exception {
+		String solution = CoastGuard.solve(grid0, "GR2", false);
 		solution = solution.replace(" ", "");
 		assertTrue("The output actions do not lead to a goal state.",
 				applyPlan(grid0, solution));
 	}
 
 	@Test(timeout = 10000)
-	public void teste1() throws Exception {
-		String solution = CoastGuard.solve(grid1, "GR1", false);
+	public void testf1() throws Exception {
+		String solution = CoastGuard.solve(grid1, "GR2", false);
 		solution = solution.replace(" ", "");
 		assertTrue("The output actions do not lead to a goal state.",
 				applyPlan(grid1, solution));
 	}
 
 	@Test(timeout = 10000)
-	public void teste2() throws Exception {
-		String solution = CoastGuard.solve(grid2, "GR1", false);
+	public void testf2() throws Exception {
+		String solution = CoastGuard.solve(grid2, "GR2", false);
 		assertTrue("The output actions do not lead to a goal state.",
 				applyPlan(grid2, solution));
 	}
 
-	@Test(timeout = 30000)
-	public void teste3() throws Exception {
-		String solution = CoastGuard.solve(grid3, "GR1", false);
-		assertTrue("The output actions do not lead to a goal state.",
-				applyPlan(grid3, solution));
-	}
-
-	@Test(timeout = 10000)
-	public void teste4() throws Exception {
-		String solution = CoastGuard.solve(grid4, "GR1", false);
+	@Test(timeout = 100000)
+	public void testf4() throws Exception {
+		String solution = CoastGuard.solve(grid4, "GR2", false);
 		assertTrue("The output actions do not lead to a goal state.",
 				applyPlan(grid4, solution));
 	}
 
 	@Test(timeout = 10000)
-	public void teste5() throws Exception {
-		String solution = CoastGuard.solve(grid5, "GR1", false);
+	public void testf5() throws Exception {
+		String solution = CoastGuard.solve(grid5, "GR2", false);
 		assertTrue("The output actions do not lead to a goal state.",
 				applyPlan(grid5, solution));
 	}
 
 	@Test(timeout = 10000)
-	public void teste6() throws Exception {
-		String solution = CoastGuard.solve(grid6, "GR1", false);
+	public void testf6() throws Exception {
+		String solution = CoastGuard.solve(grid6, "GR2", false);
 		assertTrue("The output actions do not lead to a goal state.",
 				applyPlan(grid6, solution));
 	}
 
-	@Test(timeout = 10000)
-	public void teste7() throws Exception {
-		String solution = CoastGuard.solve(grid7, "GR1", false);
+	@Test(timeout = 60000)
+	public void testf7() throws Exception {
+		String solution = CoastGuard.solve(grid7, "GR2", false);
 		assertTrue("The output actions do not lead to a goal state.",
 				applyPlan(grid7, solution));
 	}
 
 	@Test(timeout = 10000)
-	public void teste8() throws Exception {
-		String solution = CoastGuard.solve(grid8, "GR1", false);
+	public void testf8() throws Exception {
+		String solution = CoastGuard.solve(grid8, "GR2", false);
 		assertTrue("The output actions do not lead to a goal state.",
 				applyPlan(grid8, solution));
 	}
-
-	@Test(timeout = 60000)
-	public void teste9() throws Exception {
-		String solution = CoastGuard.solve(grid9, "GR1", false);
-		assertTrue("The output actions do not lead to a goal state.",
-				applyPlan(grid9, solution));
-	}
-
-	@Test(timeout = 60000)
-	public void teste10() throws Exception {
-		String solution = CoastGuard.solve(grid10, "GR1", false);
-		assertTrue("The output actions do not lead to a goal state.",
-				applyPlan(grid10, solution));
-	}
-	//
-	//
-	// @Test(timeout = 10000)
-	// public void testf0() throws Exception {
-	// String solution = CoastGuard.solve(grid0, "GR2", false);
-	// solution = solution.replace(" ", "");
-	// assertTrue("The output actions do not lead to a goal state.",
-	// applyPlan(grid0, solution));
-	// }
-	//
-	// @Test(timeout = 10000)
-	// public void testf1() throws Exception {
-	// String solution = CoastGuard.solve(grid1, "GR2", false);
-	// solution = solution.replace(" ", "");
-	// assertTrue("The output actions do not lead to a goal state.",
-	// applyPlan(grid1, solution));
-	// }
-	//
-	// @Test(timeout = 10000)
-	// public void testf2() throws Exception {
-	// String solution = CoastGuard.solve(grid2, "GR2", false);
-	// assertTrue("The output actions do not lead to a goal state.",
-	// applyPlan(grid2, solution));
-	// }
-	//
-	//
-	// @Test(timeout = 100000)
-	// public void testf4() throws Exception {
-	// String solution = CoastGuard.solve(grid4, "GR2", false);
-	// assertTrue("The output actions do not lead to a goal state.",
-	// applyPlan(grid4, solution));
-	// }
-	// @Test(timeout = 10000)
-	// public void testf5() throws Exception {
-	// String solution = CoastGuard.solve(grid5, "GR2", false);
-	// assertTrue("The output actions do not lead to a goal state.",
-	// applyPlan(grid5, solution));
-	// }
-	// @Test(timeout = 10000)
-	// public void testf6() throws Exception {
-	// String solution = CoastGuard.solve(grid6, "GR2", false);
-	// assertTrue("The output actions do not lead to a goal state.",
-	// applyPlan(grid6, solution));
-	// }
-	// @Test(timeout = 60000)
-	// public void testf7() throws Exception {
-	// String solution = CoastGuard.solve(grid7, "GR2", false);
-	// assertTrue("The output actions do not lead to a goal state.",
-	// applyPlan(grid7, solution));
-	// }
-	// @Test(timeout = 10000)
-	// public void testf8() throws Exception {
-	// String solution = CoastGuard.solve(grid8, "GR2", false);
-	// assertTrue("The output actions do not lead to a goal state.",
-	// applyPlan(grid8, solution));
-	// }
 	//
 	//
 	// @Test(timeout = 10000)

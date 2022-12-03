@@ -224,7 +224,8 @@ public abstract class GenericSearch {
 			int retrieves = 0;
 			for (Ship ship : node.ships) {
 				// Calculate Retrieves Neeeded
-				retrieves++;
+				if (ship.passengers != -20)
+					retrieves++;
 				if (ship.passengers > 0) {
 					alive += ship.passengers;
 					// Calculate Pickups Needed
@@ -305,12 +306,100 @@ public abstract class GenericSearch {
 	}
 
 	public static ArrayList<TreeNode> calcHeuristic2OnQueue(ArrayList<TreeNode> queue) {
+		// Same as First heuristic but giving weights to actions
 
+		// Another Heurstics is getting calculating the minimum distance to ship+this
+		// ship to nearest station (To be implemented)
+		for (TreeNode node : queue) {
+			int alive = 0;
+			int pickups = 0;
+			int retrieves = 0;
+			for (Ship ship : node.ships) {
+				// Calculate Retrieves Neeeded
+				if (ship.passengers != -20)
+					retrieves++;
+				if (ship.passengers > 0) {
+					alive += ship.passengers;
+					// Calculate Pickups Needed
+					pickups++;
+				}
+			}
+			// Calculate Drops Needed
+			int drops = alive / (node.cgMaxCapacity + node.passengersCarried);
+
+			// Weighing every action as states with less pickups is closer to goal
+			pickups *= 4;
+			retrieves *= 1;
+			drops *= 2;
+
+			node.h = pickups + retrieves + drops;
+
+		}
 		return queue;
 	}
 
 	public static String GR2(TreeNode node, boolean visualize) {
-		return "ts";
+		ArrayList<TreeNode> q = new ArrayList<TreeNode>();
+		q.add(node);
+		q = calcHeuristic2OnQueue(q);
+		int nodesSearched = 0;
+		while (!q.isEmpty()) {
+			int minSoFar = 2147483647;
+			int minIndex = 0;
+
+			for (int i = 0; i < q.size(); i++) {
+				node = q.get(i);
+				if (node.h < minSoFar) {
+					minSoFar = node.h;
+					minIndex = i;
+				}
+			}
+
+			node = q.remove(minIndex);
+			// System.out.println(node.depth);
+
+			// if (!q.isEmpty())
+			// if (node.depth < q.get(0).depth)
+			// System.out.println(q.get(0).depth);
+
+			// System.out.println("dequeue " + node.operator);
+			// System.out.println(visualizeGrid(state));
+
+			nodesSearched++;
+
+			if (goalTest(node)) {
+				System.out.println(node.actions);
+
+				String res = "";
+				for (String action : node.actions)
+					res += action + ",";
+				res = res.substring(0, res.length() - 1);
+				res += ";";
+				res += node.deaths + ";";
+				res += node.blackBoxRetrived + ";";
+				res += nodesSearched + "";
+
+				while (node != null) {
+					System.out.println("Node: " + node);
+					System.out.println("Parent: " + node.parent);
+					if (node.actions.size() > 0)
+						System.out.println("ACtions: " + node.actions.get(node.actions.size() - 1));
+					if (visualize)
+						node.printGrid();
+					node = node.parent;
+					System.err.println();
+				}
+				return res;
+			}
+
+			ArrayList<TreeNode> children = generateStates(node);
+			children = calcHeuristic2OnQueue(children);
+
+			// System.out.println(children.size());
+			q.addAll(children);
+		}
+		// return failure
+		return "No Solution";
 
 	}
 
