@@ -11,9 +11,7 @@ public abstract class GenericSearch {
 		int nodesSearched = 0;
 		ArrayList<TreeNode> queue = new ArrayList<>();
 		queue.add(node);
-		int counter = 0;
 		while (!queue.isEmpty()) {
-			counter++;
 			// System.out.println("Actions in queue: ");
 			// for (TreeNode n : queue) {
 			// System.out.print(n.actions + ", ");
@@ -217,7 +215,7 @@ public abstract class GenericSearch {
 
 	}
 
-	public static ArrayList<TreeNode> calcHeuristic1OnQueue(ArrayList<TreeNode> queue) {
+	public static ArrayList<TreeNode> calcHeuristic1OnQueue(ArrayList<TreeNode> queue, boolean uniformCost) {
 		for (TreeNode node : queue) {
 			int alive = 0;
 			int pickups = 0;
@@ -236,6 +234,27 @@ public abstract class GenericSearch {
 			int drops = alive / (node.cgMaxCapacity + node.passengersCarried);
 			node.h = pickups + retrieves + drops;
 
+			if (uniformCost) {
+				// Our cost is number of people dying due to this action
+				// for (String action : node.actions) {
+				// switch (action) {
+				// case "pickup":
+				// uc += (node.ships.size() - node.passengersCarried);
+				// break;
+				// case "retrieve":
+				// uc += node.ships.size();
+				// break;
+				// case "drop":
+				// uc += node.ships.size();
+				// break;
+				// default:
+				// uc += node.ships.size();
+
+				// }
+				// }
+				node.h += node.pathCost;
+			}
+
 		}
 		return queue;
 	}
@@ -243,7 +262,7 @@ public abstract class GenericSearch {
 	public static String GR1(TreeNode node, boolean visualize) {
 		ArrayList<TreeNode> q = new ArrayList<TreeNode>();
 		q.add(node);
-		q = calcHeuristic1OnQueue(q);
+		q = calcHeuristic1OnQueue(q, false);
 		int nodesSearched = 0;
 		while (!q.isEmpty()) {
 			int minSoFar = 2147483647;
@@ -295,7 +314,7 @@ public abstract class GenericSearch {
 			}
 
 			ArrayList<TreeNode> children = generateStates(node);
-			children = calcHeuristic1OnQueue(children);
+			children = calcHeuristic1OnQueue(children, false);
 
 			// System.out.println(children.size());
 			q.addAll(children);
@@ -305,7 +324,7 @@ public abstract class GenericSearch {
 
 	}
 
-	public static ArrayList<TreeNode> calcHeuristic2OnQueue(ArrayList<TreeNode> queue) {
+	public static ArrayList<TreeNode> calcHeuristic2OnQueue(ArrayList<TreeNode> queue, boolean uniformCost) {
 		// Same as First heuristic but giving weights to actions
 
 		// Another Heurstics is getting calculating the minimum distance to ship+this
@@ -333,7 +352,27 @@ public abstract class GenericSearch {
 			drops *= 2;
 
 			node.h = pickups + retrieves + drops;
+			if (uniformCost) {
+				// Our cost is number of people dying due to this action
+				// int uc = 0;
+				// for (String action : node.actions) {
+				// switch (action) {
+				// case "pickup":
+				// uc += (node.ships.size() - node.passengersCarried);
+				// break;
+				// case "retrieve":
+				// uc += node.ships.size();
+				// break;
+				// case "drop":
+				// uc += node.ships.size();
+				// break;
+				// default:
+				// uc += node.ships.size();
 
+				// }
+				// }
+				node.h += node.pathCost;
+			}
 		}
 		return queue;
 	}
@@ -341,7 +380,7 @@ public abstract class GenericSearch {
 	public static String GR2(TreeNode node, boolean visualize) {
 		ArrayList<TreeNode> q = new ArrayList<TreeNode>();
 		q.add(node);
-		q = calcHeuristic2OnQueue(q);
+		q = calcHeuristic2OnQueue(q, false);
 		int nodesSearched = 0;
 		while (!q.isEmpty()) {
 			int minSoFar = 2147483647;
@@ -393,7 +432,137 @@ public abstract class GenericSearch {
 			}
 
 			ArrayList<TreeNode> children = generateStates(node);
-			children = calcHeuristic2OnQueue(children);
+			children = calcHeuristic2OnQueue(children, false);
+
+			// System.out.println(children.size());
+			q.addAll(children);
+		}
+		// return failure
+		return "No Solution";
+
+	}
+
+	public static String AS1(TreeNode node, boolean visualize) {
+		ArrayList<TreeNode> q = new ArrayList<TreeNode>();
+		q.add(node);
+		q = calcHeuristic1OnQueue(q, true);
+		int nodesSearched = 0;
+		while (!q.isEmpty()) {
+			int minSoFar = 2147483647;
+			int minIndex = 0;
+
+			for (int i = 0; i < q.size(); i++) {
+				node = q.get(i);
+				if (node.h < minSoFar) {
+					minSoFar = node.h;
+					minIndex = i;
+				}
+			}
+
+			node = q.remove(minIndex);
+			// System.out.println(node.depth);
+
+			// if (!q.isEmpty())
+			// if (node.depth < q.get(0).depth)
+			// System.out.println(q.get(0).depth);
+
+			// System.out.println("dequeue " + node.operator);
+			// System.out.println(visualizeGrid(state));
+
+			nodesSearched++;
+
+			if (goalTest(node)) {
+				System.out.println(node.actions);
+
+				String res = "";
+				for (String action : node.actions)
+					res += action + ",";
+				res = res.substring(0, res.length() - 1);
+				res += ";";
+				res += node.deaths + ";";
+				res += node.blackBoxRetrived + ";";
+				res += nodesSearched + "";
+
+				while (node != null) {
+					System.out.println("Node: " + node);
+					System.out.println("Parent: " + node.parent);
+					if (node.actions.size() > 0)
+						System.out.println("ACtions: " + node.actions.get(node.actions.size() - 1));
+					if (visualize)
+						node.printGrid();
+					node = node.parent;
+					System.err.println();
+				}
+				return res;
+			}
+
+			ArrayList<TreeNode> children = generateStates(node);
+			children = calcHeuristic1OnQueue(children, true);
+
+			// System.out.println(children.size());
+			q.addAll(children);
+		}
+		// return failure
+		return "No Solution";
+
+	}
+
+	public static String AS2(TreeNode node, boolean visualize) {
+		ArrayList<TreeNode> q = new ArrayList<TreeNode>();
+		q.add(node);
+		q = calcHeuristic2OnQueue(q, true);
+		int nodesSearched = 0;
+		while (!q.isEmpty()) {
+			int minSoFar = 2147483647;
+			int minIndex = 0;
+
+			for (int i = 0; i < q.size(); i++) {
+				node = q.get(i);
+				if (node.h < minSoFar) {
+					minSoFar = node.h;
+					minIndex = i;
+				}
+			}
+
+			node = q.remove(minIndex);
+			// System.out.println(node.depth);
+
+			// if (!q.isEmpty())
+			// if (node.depth < q.get(0).depth)
+			// System.out.println(q.get(0).depth);
+
+			// System.out.println("dequeue " + node.operator);
+			// System.out.println(visualizeGrid(state));
+
+			nodesSearched++;
+
+			if (goalTest(node)) {
+				System.out.println(node.actions);
+
+				String res = "";
+				for (String action : node.actions)
+					res += action + ",";
+				res = res.substring(0, res.length() - 1);
+				res += ";";
+				res += node.deaths + ";";
+				res += node.blackBoxRetrived + ";";
+				res += nodesSearched + "";
+
+				while (node != null) {
+					System.out.println("Node: " + node);
+					System.out.println("Parent: " + node.parent);
+					if (node.actions.size() > 0)
+						System.out.println("ACtions: " + node.actions.get(node.actions.size() - 1));
+					if (visualize)
+						node.printGrid();
+					node = node.parent;
+					System.err.println();
+				}
+				return res;
+			}
+
+			ArrayList<TreeNode> children = generateStates(node);
+			children = calcHeuristic2OnQueue(children, true);
 
 			// System.out.println(children.size());
 			q.addAll(children);
@@ -416,6 +585,7 @@ public abstract class GenericSearch {
 				// Do something
 				child.pickUp();
 				child.actions.add("pickup");
+				child.pathCost += 1;
 				child.damage();
 				child.gridString = CoastGuard.encodeGrid(child);
 				child.updateGrid();
@@ -425,6 +595,7 @@ public abstract class GenericSearch {
 			if (action == "drop") {
 				child.drop();
 				child.actions.add("drop");
+				child.pathCost += 1;
 				child.damage();
 				child.gridString = CoastGuard.encodeGrid(child);
 				child.updateGrid();
@@ -434,6 +605,7 @@ public abstract class GenericSearch {
 			if (action == "retrieve") {
 				child.retrieve();
 				child.actions.add("retrieve");
+				child.pathCost += 1;
 				child.damage();
 				child.gridString = CoastGuard.encodeGrid(child);
 				child.updateGrid();
@@ -449,6 +621,7 @@ public abstract class GenericSearch {
 			if (action == "left") {
 				child.moveLeft();
 				child.actions.add("left");
+				child.pathCost += 5;
 				child.damage();
 				child.gridString = CoastGuard.encodeGrid(child);
 				child.updateGrid();
@@ -458,6 +631,7 @@ public abstract class GenericSearch {
 			if (action == "right") {
 				child.moveRight();
 				child.actions.add("right");
+				child.pathCost += 5;
 				child.damage();
 				child.gridString = CoastGuard.encodeGrid(child);
 				child.updateGrid();
@@ -467,6 +641,7 @@ public abstract class GenericSearch {
 			if (action == "up") {
 				child.moveUp();
 				child.actions.add("up");
+				child.pathCost += 5;
 				child.damage();
 				child.gridString = CoastGuard.encodeGrid(child);
 				child.updateGrid();
@@ -476,6 +651,7 @@ public abstract class GenericSearch {
 			if (action == "down") {
 				child.moveDown();
 				child.actions.add("down");
+				child.pathCost += 5;
 				child.damage();
 				child.gridString = CoastGuard.encodeGrid(child);
 				child.updateGrid();
