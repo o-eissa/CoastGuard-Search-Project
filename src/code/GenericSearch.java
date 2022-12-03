@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 
 public abstract class GenericSearch {
-	static HashSet<String> visitedStates = new HashSet<String>();
+	public static HashSet<String> visitedStates = new HashSet<String>();
 
 	public static String BFS(TreeNode node, boolean visualize) {
 		// finalGrid.getAllActions();
@@ -82,6 +82,7 @@ public abstract class GenericSearch {
 		int nodesSearched = 0;
 		ArrayList<TreeNode> queue = new ArrayList<>();
 		queue.add(node);
+
 		while (!queue.isEmpty()) {
 			// System.out.println("Actions in queue: ");
 			// for (TreeNode n : queue) {
@@ -143,6 +144,77 @@ public abstract class GenericSearch {
 
 		}
 		return "No Solution found";
+	}
+
+	public static String IDS(TreeNode node, boolean visualize) {
+
+		int level = 0;
+		ArrayList<TreeNode> q;
+
+		ArrayList<TreeNode> children = new ArrayList<TreeNode>();
+		int nodesSearched = 0;
+
+		String solution = "No solution";
+
+		while (solution.equals("No solution")) {
+
+			// System.out.println("level: " + level);
+
+			q = new ArrayList<TreeNode>();
+			visitedStates = new HashSet<String>();
+			q.add(node);
+
+			while (!q.isEmpty()) {
+
+				node = q.remove(0);
+				nodesSearched++;
+
+				if (node.actions.size() < level) {
+					children = generateStates(node);
+					// System.out.println("Actions Size: " + node.actions + " level: " +
+					// level);
+				} else {
+					children.clear();
+				}
+
+				if (goalTest(node)) {
+					System.out.println(node.actions);
+
+					String res = "";
+					for (String action : node.actions)
+						res += action + ",";
+					res = res.substring(0, res.length() - 1);
+					res += ";";
+					res += node.deaths + ";";
+					res += node.blackBoxRetrived + ";";
+					res += nodesSearched + "";
+
+					while (node != null) {
+						System.out.println("Node: " + node);
+						System.out.println("Parent: " + node.parent);
+						if (node.actions.size() > 0)
+							System.out.println("ACtions: " + node.actions.get(node.actions.size() - 1));
+						if (visualize)
+							node.printGrid();
+						node = node.parent;
+						System.err.println();
+					}
+					solution = res;
+					return res;
+				}
+
+				q.addAll(children);
+
+			}
+
+			level++;
+			solution = "No solution";
+
+		}
+		System.out.println("No solution");
+		// return failure
+		return "No Solution";
+
 	}
 
 	private static ArrayList<TreeNode> generateStates(TreeNode node) {

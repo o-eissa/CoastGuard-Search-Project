@@ -2,6 +2,7 @@ package code;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class CoastGuard extends GenericSearch {
 
@@ -167,13 +168,15 @@ public class CoastGuard extends GenericSearch {
 
 	public static String solve(String grid, String strategy, boolean visualize) {
 		TreeNode root = new TreeNode(null, new ArrayList<String>(), 0, 0, 0, 0, grid);
+		CoastGuard.visitedStates = new HashSet<>();
+
 		switch (strategy) {
 			case "BF":
 				return BFS(root, visualize);
 			case "DF":
 				return DFS(root, visualize);
 			case "ID":
-				break;
+				return IDS(root, visualize);
 			case "GR1":
 				break;
 			case "GR2":
@@ -416,6 +419,8 @@ public class CoastGuard extends GenericSearch {
 		String grid7 = "6,7;82;1,4;2,3;1,1,58,3,0,58,4,2,72;";
 		String grid8 = "6,6;74;1,1;0,3,1,0,2,0,2,4,4,0,4,2,5,0;0,0,78,3,3,5,4,3,40;";
 		String grid9 = "7,5;100;3,4;2,6,3,5;0,0,4,0,1,8,1,4,77,1,5,1,3,2,94,4,3,46;";
+		String grid10 = "10,6;59;1,7;0,0,2,2,3,0,5,3;1,3,69,3,4,80,4,7,94,4,9,14,5,2,39;";
+
 		// String solution = solve(grid0, "BF", false);
 		// System.out.println(solution);
 		// solution = solution.replace(" ", "");
@@ -425,18 +430,25 @@ public class CoastGuard extends GenericSearch {
 
 		// System.out.println("\n Now DF on:" + grid0 + "\n");
 
-		String solution2 = solve(grid0, "DF", false);
-		System.out.println(solution2);
-		solution2 = solution2.replace(" ", "");
-		System.out.println(applyPlan(grid0, solution2));
+		String solution = CoastGuard.solve(grid5, "ID", false);
 
-		String solution = solve(grid0, "DF", false);
-		System.out.println(solution);
-		solution2 = solution.replace(" ", "");
-		System.out.println(applyPlan(grid0, solution));
+		System.out.println("Assertion: " +
+				applyPlan(grid5, solution));
+
+		// String solution = solve(grid0, "DF", false);
+		// System.out.println(solution);
+		// solution2 = solution.replace(" ", "");
+		// System.out.println(applyPlan(grid0, solution));
 
 		// Multiple retrieves
 		// Uncounted retrieves
 
 	}
 }
+// [up, up, pickup, retrieve, up, pickup, down, down, down, down, right,
+// retrieve, up, up, up, up, left, down, down, down, down, right, up, up, up,
+// up, left, retrieve, down, down, down, down, left, left, up, up, up, up, drop]
+
+// [up, up, pickup, retrieve, up, pickup, down, down, down, down, right,
+// retrieve, up, up, up, up, left, down, down, down, down, right, up, up, up,
+// up, left, retrieve, down, down, down, down, right, up, up, up, up, left]
