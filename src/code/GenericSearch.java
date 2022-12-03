@@ -217,6 +217,103 @@ public abstract class GenericSearch {
 
 	}
 
+	public static ArrayList<TreeNode> calcHeuristic1OnQueue(ArrayList<TreeNode> queue) {
+		for (TreeNode node : queue) {
+			int alive = 0;
+			int pickups = 0;
+			int retrieves = 0;
+			for (Ship ship : node.ships) {
+				// Calculate Retrieves Neeeded
+				retrieves++;
+				if (ship.passengers > 0) {
+					alive += ship.passengers;
+					// Calculate Pickups Needed
+					pickups++;
+				}
+			}
+			// Calculate Drops Needed
+			int drops = alive / (node.cgMaxCapacity + node.passengersCarried);
+			node.h = pickups + retrieves + drops;
+
+		}
+		return queue;
+	}
+
+	public static String GR1(TreeNode node, boolean visualize) {
+		ArrayList<TreeNode> q = new ArrayList<TreeNode>();
+		q.add(node);
+		q = calcHeuristic1OnQueue(q);
+		int nodesSearched = 0;
+		while (!q.isEmpty()) {
+			int minSoFar = 2147483647;
+			int minIndex = 0;
+
+			for (int i = 0; i < q.size(); i++) {
+				node = q.get(i);
+				if (node.h < minSoFar) {
+					minSoFar = node.h;
+					minIndex = i;
+				}
+			}
+
+			node = q.remove(minIndex);
+			// System.out.println(node.depth);
+
+			// if (!q.isEmpty())
+			// if (node.depth < q.get(0).depth)
+			// System.out.println(q.get(0).depth);
+
+			// System.out.println("dequeue " + node.operator);
+			// System.out.println(visualizeGrid(state));
+
+			nodesSearched++;
+
+			if (goalTest(node)) {
+				System.out.println(node.actions);
+
+				String res = "";
+				for (String action : node.actions)
+					res += action + ",";
+				res = res.substring(0, res.length() - 1);
+				res += ";";
+				res += node.deaths + ";";
+				res += node.blackBoxRetrived + ";";
+				res += nodesSearched + "";
+
+				while (node != null) {
+					System.out.println("Node: " + node);
+					System.out.println("Parent: " + node.parent);
+					if (node.actions.size() > 0)
+						System.out.println("ACtions: " + node.actions.get(node.actions.size() - 1));
+					if (visualize)
+						node.printGrid();
+					node = node.parent;
+					System.err.println();
+				}
+				return res;
+			}
+
+			ArrayList<TreeNode> children = generateStates(node);
+			children = calcHeuristic1OnQueue(children);
+
+			// System.out.println(children.size());
+			q.addAll(children);
+		}
+		// return failure
+		return "No Solution";
+
+	}
+
+	public static ArrayList<TreeNode> calcHeuristic2OnQueue(ArrayList<TreeNode> queue) {
+
+		return queue;
+	}
+
+	public static String GR2(TreeNode node, boolean visualize) {
+		return "ts";
+
+	}
+
 	private static ArrayList<TreeNode> generateStates(TreeNode node) {
 		ArrayList<String> possibleActions = node.getAllPossibleActions();
 		// System.out.println(possibleActions);

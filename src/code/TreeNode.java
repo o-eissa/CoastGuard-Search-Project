@@ -20,6 +20,7 @@ public class TreeNode {
 	ArrayList<String> actions = new ArrayList<>();
 	String[][] grid;
 	String gridString;
+	int h;
 
 	public TreeNode(TreeNode parent, ArrayList<String> actions, int pathCost, int deaths, int blackBoxRetrived,
 			int passengersCarried, String gridString) {
@@ -32,6 +33,7 @@ public class TreeNode {
 		this.gridString = gridString;
 
 		this.grid = parseGridString(gridString);
+		this.h = 10000000;
 	}
 
 	public String[][] parseGridString(String gridString) {

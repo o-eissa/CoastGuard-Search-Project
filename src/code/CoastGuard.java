@@ -178,9 +178,9 @@ public class CoastGuard extends GenericSearch {
 			case "ID":
 				return IDS(root, visualize);
 			case "GR1":
-				break;
+				return GR1(root, visualize);
 			case "GR2":
-				break;
+				return GR2(root, visualize);
 			case "AS1":
 				break;
 			case "AS2":
